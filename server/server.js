@@ -2,14 +2,9 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const PORT = 5000;
-var cors = require("cors");
+let cors = require("cors");
 
-app.use(cors()); // Use this after the variable declaration
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   // next();
-// });
+app.use(cors());
 
 app.get("/", (req, res) => {
   fs.readFile("data.json", (err, data) => {
@@ -21,3 +16,5 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+app.post();

@@ -1,11 +1,16 @@
 import create from "zustand";
 import axios from "axios";
 
-interface Post {
-  userId: number;
-  id: number;
+export interface Post {
+  id: number | null;
   name: string;
-  body: string;
+  email: string;
+  gender: string;
+  address: {
+    street: string;
+    city: string;
+  };
+  phone: string;
 }
 
 interface Store {

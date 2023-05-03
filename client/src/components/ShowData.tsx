@@ -19,7 +19,7 @@ const ShowData: FC<ShowDataProps> = ({}) => {
     return <p>{error}</p>;
   }
 
-  console.log(1, data);
+  console.log(data);
   return (
     <ul>
       {data.map((item) => (
