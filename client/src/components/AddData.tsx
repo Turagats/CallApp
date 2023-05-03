@@ -17,6 +17,7 @@ const initialAddData: Post = {
   id: null,
   name: "",
   email: "",
+
   gender: "",
   address: {
     street: "",
@@ -38,13 +39,6 @@ const Form: React.FC<AddDataProps> = ({}) => {
     event.preventDefault();
     console.log("logges");
     console.log(1, state);
-
-    // try {
-    //   const response = await axios.put('/api/data', { id: 2, name: 'Jane Doe' });
-    //   setData(response.data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
 
   return (
