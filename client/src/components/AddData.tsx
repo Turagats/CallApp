@@ -28,8 +28,14 @@ const initialAddData: Post = {
   phone: "",
 };
 
+interface User {
+  id: number;
+  name: string;
+}
+
 const Form: React.FC<AddDataProps> = ({}) => {
   const [state, setState] = useState<Post>(initialAddData);
+  const [usersList, setUsersList] = useState<User[]>([]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -47,18 +53,25 @@ const Form: React.FC<AddDataProps> = ({}) => {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("logges");
     console.log(1, state);
-    axios
-      .post("http://localhost:5000/addData", state)
-      .then((response) => {
-        console.log(response.data.message);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      const response = await axios.post("http://localhost:5000/addData", state);
+      console.log(response.data);
+      alert(response.data);
+      setUsersList(response.data);
+    } catch (error) {
+    } finally {
+    }
+    // axios.post("http://localhost:5000/addData", state);
+    // .then((response: any) => {
+    //   console.log(response.data.message);
+    // })
+    // .catch((error: any) => {
+    //   console.error(error);
+    // });
   };
 
   return (
