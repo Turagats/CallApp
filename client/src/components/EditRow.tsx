@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { Modal, Input, Select } from "antd";
 import { Post } from "./Zustand";
+import useStore from "./Zustand";
 import axios from "axios";
 
 interface EditRowProps {}
@@ -61,8 +62,10 @@ const EditRow: FC<EditRowProps> = ({ visible, editModalVisible, record }) => {
       );
       console.log(response.data);
       editModalVisible(false);
+      fetchData();
     } catch (error) {}
   };
+
   return (
     <div>
       <Modal
@@ -132,5 +135,8 @@ const EditRow: FC<EditRowProps> = ({ visible, editModalVisible, record }) => {
 
 export default EditRow;
 function editModalVisible(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+function fetchData() {
   throw new Error("Function not implemented.");
 }

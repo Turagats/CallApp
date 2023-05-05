@@ -5,6 +5,7 @@ import useStore from "./Zustand";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import AddRow from "./AddRow";
 import EditRow from "./EditRow";
+import axios from "axios";
 
 interface MainPageProps {}
 
@@ -14,11 +15,11 @@ const MainPage: FC<MainPageProps> = ({}) => {
   const [addModaleVisible, setAddModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [rowIsEditing, setRowIsEditing] = useState(null);
+  const [trigger, setTrigger] = useState(false);
 
   useEffect(() => {
     setDataSource(data);
   }, [data]);
-  //   setDataSource(data);
   const columns = [
     { title: "id", dataIndex: "id", key: "id" },
     { title: "Name", dataIndex: "name", key: "name" },
@@ -53,12 +54,19 @@ const MainPage: FC<MainPageProps> = ({}) => {
       okText: "Yes",
       okType: "danger",
 
-      onOk: () =>
-        setDataSource((pre) => {
-          return pre.filter((row) => row.id !== record.id);
-        }),
+      onOk: () => {
+        try {
+          const response = axios.delete(
+            `http://localhost:5000/deleteData/${record.id}`
+          );
+          setTrigger((prev) => !prev);
+
+          fetchData();
+        } catch (error) {}
+      },
     });
   };
+
   const onEditRow = (record: any) => {
     setEditModalVisible(true);
     setRowIsEditing({ ...record });
@@ -66,7 +74,7 @@ const MainPage: FC<MainPageProps> = ({}) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, trigger]);
 
   if (loading) {
     return <p>Loading...</p>;

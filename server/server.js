@@ -120,3 +120,39 @@ app.put("/editData", (req, res) => {
     });
   });
 });
+
+app.delete("/deleteData/:id", (req, res) => {
+  const id = req.params.id;
+
+  // Read the existing data from the file
+  fs.readFile("data.json", (err, data) => {
+    if (err) throw err;
+
+    let existingData = [];
+
+    try {
+      existingData = JSON.parse(data);
+    } catch (err) {
+      console.error(`Error parsing existing data: ${err}`);
+    }
+
+    // Find the index of the data object with the given ID
+    const dataIndex = existingData.findIndex((data) => data.id === Number(id));
+
+    if (dataIndex === -1) {
+      // If no data object with the given ID was found, return an error message
+      res.status(404).json({ message: `Data with ID ${id} not found` });
+    } else {
+      // Remove the data object at the found index from the existing data array
+      existingData.splice(dataIndex, 1);
+
+      // Write the updated data back to the file
+      fs.writeFile("data.json", JSON.stringify(existingData), (err) => {
+        if (err) throw err;
+        console.log("Data written to file");
+
+        res.json({ message: "Data deleted and written to file!" });
+      });
+    }
+  });
+});
