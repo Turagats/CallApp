@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Modal, Input, Select } from "antd";
 import { Post } from "./Zustand";
-import useStore from "./Zustand";
 import axios from "axios";
 
 interface EditRowProps {}
@@ -10,6 +9,7 @@ interface EditRowProps {
   visible: boolean;
   editModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   record: any;
+  refreshSetter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const editedRow: Post = {
@@ -24,18 +24,20 @@ const editedRow: Post = {
   phone: "",
 };
 
-const EditRow: FC<EditRowProps> = ({ visible, editModalVisible, record }) => {
+const EditRow: FC<EditRowProps> = ({
+  visible,
+  editModalVisible,
+  record,
+  refreshSetter,
+}) => {
   const [editedRowValues, setEditedRowValues] = useState(record);
 
   useEffect(() => {
     setEditedRowValues(record);
   }, [record]);
 
-  // console.log("datp", editedRowValues);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement> | any) => {
     if (event === "male" || event === "female") {
-      // const { value } = event;
       setEditedRowValues((prevState: any) => ({ ...prevState, gender: event }));
     } else {
       const { name, value } = event.target;
@@ -60,11 +62,12 @@ const EditRow: FC<EditRowProps> = ({ visible, editModalVisible, record }) => {
         "http://localhost:5000/editData",
         editedRowValues
       );
-      console.log(response.data);
       editModalVisible(false);
+      refreshSetter((prev) => !prev);
       fetchData();
     } catch (error) {}
   };
+  const okButtonStyle = { borderColor: "blue", color: "black" };
 
   return (
     <div>
@@ -75,13 +78,14 @@ const EditRow: FC<EditRowProps> = ({ visible, editModalVisible, record }) => {
           editModalVisible(false);
         }}
         onOk={onEditSave}
+        okText="Save"
+        okButtonProps={{ style: okButtonStyle }}
       >
         <Input
           name="id"
           className="mt-2"
           placeholder="Name"
           value={editedRowValues?.id}
-          // onChange={handleChange}
         ></Input>
         <Input
           name="name"

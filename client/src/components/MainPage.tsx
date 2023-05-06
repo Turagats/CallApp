@@ -6,6 +6,7 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import AddRow from "./AddRow";
 import EditRow from "./EditRow";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface MainPageProps {}
 
@@ -16,6 +17,9 @@ const MainPage: FC<MainPageProps> = ({}) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [rowIsEditing, setRowIsEditing] = useState(null);
   const [trigger, setTrigger] = useState(false);
+
+  let maxId =
+    data.reduce((max: any, obj: any) => (obj.id > max ? obj.id : max), 0) + 1;
 
   useEffect(() => {
     setDataSource(data);
@@ -59,8 +63,8 @@ const MainPage: FC<MainPageProps> = ({}) => {
           const response = axios.delete(
             `http://localhost:5000/deleteData/${record.id}`
           );
-          setTrigger((prev) => !prev);
 
+          setTrigger((prev) => !prev);
           fetchData();
         } catch (error) {}
       },
@@ -86,15 +90,22 @@ const MainPage: FC<MainPageProps> = ({}) => {
 
   return (
     <div className="flex flex-col justify-center h-full items-center">
-      <AddRow visible={addModaleVisible} addModalVisible={setAddModalVisible} />
+      <AddRow
+        visible={addModaleVisible}
+        addModalVisible={setAddModalVisible}
+        rowlength={maxId}
+      />
       <EditRow
         visible={editModalVisible}
         editModalVisible={setEditModalVisible}
         record={rowIsEditing}
+        refreshSetter={setTrigger}
       />
-      <Button className="m-5 w-1/4" onClick={onAddNewRow}>
+      <Button className="m-5 w-1/8" onClick={onAddNewRow}>
         Add New Row
       </Button>
+      {/* <PieChart /> */}
+
       <Table
         dataSource={dataSource}
         columns={columns}
@@ -106,6 +117,9 @@ const MainPage: FC<MainPageProps> = ({}) => {
           },
         })}
       />
+      <Button className="m-5 min-w-1/4 min-w-min">
+        <Link to={"/pie-chart"}>Pie Chart</Link>
+      </Button>
     </div>
   );
 };

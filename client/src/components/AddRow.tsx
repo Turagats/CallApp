@@ -6,6 +6,7 @@ import axios from "axios";
 interface AddRowProps {
   visible: boolean;
   addModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  rowlength: number;
 }
 
 const newAddedRow: Post = {
@@ -20,7 +21,7 @@ const newAddedRow: Post = {
   phone: "",
 };
 
-const AddRow: FC<AddRowProps> = ({ visible, addModalVisible }) => {
+const AddRow: FC<AddRowProps> = ({ visible, addModalVisible, rowlength }) => {
   const [newRow, setNewRow] = useState<Post>(newAddedRow);
 
   const onAfterAddNewRow = async () => {
@@ -29,20 +30,12 @@ const AddRow: FC<AddRowProps> = ({ visible, addModalVisible }) => {
         "http://localhost:5000/addData",
         newRow
       );
-      console.log(response.data);
       addModalVisible(false);
     } catch (error) {}
   };
 
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = event.target;
-  //   setNewRow((prevState) => ({ ...prevState, [name]: value }));
-  // };
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement> | any) => {
-    console.log(event);
     if (event === "male" || event === "female") {
-      // const { value } = event;
       setNewRow((prevState: any) => ({ ...prevState, gender: event }));
     } else {
       const { name, value } = event.target;
@@ -60,7 +53,6 @@ const AddRow: FC<AddRowProps> = ({ visible, addModalVisible }) => {
       },
     }));
   };
-  console.log(newRow);
 
   return (
     <div>
@@ -72,6 +64,13 @@ const AddRow: FC<AddRowProps> = ({ visible, addModalVisible }) => {
         }}
         onOk={onAfterAddNewRow}
       >
+        <Input
+          name="id"
+          className="mt-2"
+          placeholder="id"
+          value={rowlength}
+          disabled
+        ></Input>
         <Input
           name="name"
           className="mt-2"
@@ -99,7 +98,6 @@ const AddRow: FC<AddRowProps> = ({ visible, addModalVisible }) => {
               label: "female",
             },
           ]}
-          //   value={newRow.gender}
           onChange={handleChange}
         ></Select>
         <Input
